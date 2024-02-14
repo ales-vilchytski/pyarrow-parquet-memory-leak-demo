@@ -11,10 +11,20 @@ python: 3.10.13-slim-bullseye
 pyarrow==15.0.0, pandas==2.1.4
 ```
 
+```
+Platform: MacOS 13.6
+HW: MacBook Pro M1 Max, 32GB RAM
+Docker: version 24.0.6 (Docker Desktop)
+python: 3.10.13-slim-bullseye
+pyarrow==15.0.0, pandas==2.1.4
+```
 
-## Reproduce steps
+## Steps to reproduct
 
 ```
+git clone https://github.com/ales-vilchytski/pyarrow-parquet-memory-leak-demo
+cd pyarrow-parquet-memory-leak-demo
+
 docker build -t memleak .
 docker run --rm -it --memory=3g --memory-swap=3g memleak
 ```
@@ -64,8 +74,9 @@ So iterating over many files exhaust available memory and causes OOM eventually.
 
 - switching from jemalloc to malloc makes things even worse
 - script fails after few dozens iterations, larger heap/swap size allows script to run significantly longer
-- we encounter OOM on production in k8s, pod has memory limit of 24GB and usually fails to process files 100+ files of around 200MB each
+- we encounter OOM on production in k8s, pod has memory limit of 24GB and usually fails to process 100+ files of around 200MB each
 - python 3.12 and some jemalloc opts tuning may work better but still encounters OOM
 - as example `docker run --rm -it --memory=3g --memory-swap=3g --env="JE_ARROW_MALLOC_CONF=abort_conf:true,confirm_conf
-:true,retain:false,background_thread:true,dirty_decay_ms:0,muzzy_decay_ms:0,lg_extent_max_active_fit:2" memleak` seems to work much longer until OOM
+:true,retain:false,background_thread:true,dirty_decay_ms:0,muzzy_decay_ms:0,lg_extent_max_active_fit:2" memleak` seems to work much longer before OOM
 - tried `pyarrow 13, 14`, `pandas 2.0.3`, images `python bullseye` and `bookworm` - no effect
+- Mac uses more memory, but AFAIK it's expected behaviour, so 6GB memory limit ends with 40+ iterations
