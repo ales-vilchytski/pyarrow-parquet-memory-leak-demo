@@ -23,8 +23,8 @@ for i in range(100000):
     idx.append(i)
 
 
-df = pd.DataFrame(data,
-                  index=idx)
+df = pd.DataFrame(data, index=idx)
+df = df.astype({'a': 'float64','b': 'string','c': 'string'})
 
 print('writing')
 table = pa.Table.from_pandas(df)
