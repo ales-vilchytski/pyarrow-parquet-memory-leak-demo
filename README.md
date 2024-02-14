@@ -14,12 +14,12 @@ pyarrow==15.0.0, pandas==2.1.4
 ```
 Platform: MacOS 13.6
 HW: MacBook Pro M1 Max, 32GB RAM
-Docker: version 24.0.6 (Docker Desktop)
+Docker: 24.0.6 (Docker Desktop), default settings, OOM killer enabled
 python: 3.10.13-slim-bullseye
 pyarrow==15.0.0, pandas==2.1.4
 ```
 
-## Steps to reproduct
+## Steps to reproduce
 
 ```
 git clone https://github.com/ales-vilchytski/pyarrow-parquet-memory-leak-demo
