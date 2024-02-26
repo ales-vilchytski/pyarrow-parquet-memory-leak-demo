@@ -8,7 +8,7 @@ import time
 
 
 def main():
-    print(f".Reading data")
+    print("Reading data")
 
     c = 0
     while True:
@@ -19,7 +19,7 @@ def main():
         pa.Table.from_pandas(df)
         
         end = time.time()
-        print(f'iteration {c}, time {end - start}s')
+        print(f'.iteration {c}, time {end - start}s')
         c += 1
         time.sleep(0)
     
