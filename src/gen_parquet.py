@@ -8,21 +8,19 @@ def main(args):
     idx = []
     data = {
         's1': [],
-        's2': [],
     }
     c = 0
 
     print('generating')
-    for i in range(100000):
-        data['s1'].append(f'abc{c}'*300)
-        data['s2'].append(f'def{c}'*300)
+    for i in range(200000):
+        data['s1'].append(f'ab{c}'*2000)
         c = c + 1
         idx.append(i)
 
 
     df = pd.DataFrame(data, index=idx)
     if args.use_strings:
-        df = df.astype({'s1': 'string', 's2': 'string'})
+        df = df.astype({'s1': 'string'})
 
     print('writing')
     table = pa.Table.from_pandas(df)

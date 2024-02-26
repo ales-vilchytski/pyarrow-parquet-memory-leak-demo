@@ -1,3 +1,5 @@
+import argparse
+
 import sys
 import pyarrow as pa
 import pyarrow.dataset as ds
@@ -7,8 +9,9 @@ import signal
 import time
 
 
-def main():
+def main(args):
     print("Reading data")
+    pa.log_memory_allocations(enable=args.log_memory_allocations)
 
     c = 0
     while True:
@@ -21,8 +24,9 @@ def main():
         end = time.time()
         print(f'.iteration {c}, time {end - start}s')
         c += 1
-        time.sleep(0)
-    
+        if args.sleep_each_iteration >= 0:
+            time.sleep(args.sleep_each_iteration)
+
 
 def interrupt_handler(signum, frame):
     print('interrupted')
@@ -31,4 +35,8 @@ def interrupt_handler(signum, frame):
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, interrupt_handler)
 
-    main()
+    parser = argparse.ArgumentParser("Iterate over singe parquet file and do to_table.to_pandas")
+    parser.add_argument('--log-memory-allocations', action='store_true')
+    parser.add_argument('--sleep-each-iteration', type=int, default=-1)
+
+    main(parser.parse_args())
